@@ -13,7 +13,7 @@ const dirPath = path.resolve(__dirname, './secret-folder');
         ext = ext.slice(1);
         let size = (await fsPromises.stat(path.resolve(dirPath, file.name)))
           .size;
-        console.log(`${name} - ${ext} - ${size}b`);
+        console.log(`${name} - ${ext} - ${size} bytes`);
       }
     }
   } catch (error) {
