@@ -120,6 +120,7 @@ async function buildPage() {
       inputFileData,
       {
         encoding: 'utf8',
+        flag: 'w',
       }
     );
   } catch (error) {
