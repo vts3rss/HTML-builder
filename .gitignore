@@ -107,4 +107,5 @@ dist
 **/desktop.ini
 .prettierrc
 .idea
+.vscode
 # .editorconfig

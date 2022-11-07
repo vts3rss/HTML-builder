@@ -1,7 +1,6 @@
 const fs = require('fs');
 const fsPromises = require('fs/promises');
 const path = require('path');
-const { pipeline } = require('stream/promises');
 
 (async () => {
   await bundleStyles('bundle.css');
@@ -13,7 +12,11 @@ async function bundleStyles(outCssName) {
   try {
     const outDir = path.resolve(__dirname, 'project-dist');
     await fsPromises.mkdir(outDir, { recursive: true });
-    let iterateCount = 1;
+    const outputStream = fs.createWriteStream(
+      path.resolve(outDir, outCssName),
+      { encoding: 'utf8', flags: 'w' }
+    );
+
     let files = await fsPromises.readdir(readDir, { withFileTypes: true });
 
     for (let file of files) {
@@ -25,15 +28,9 @@ async function bundleStyles(outCssName) {
           { encoding: 'utf8' }
         );
 
-        let mode = iterateCount === 1 ? 'w' : 'a';
-        iterateCount++;
-
-        const outputStream = fs.createWriteStream(
-          path.resolve(outDir, outCssName),
-          { encoding: 'utf8', flags: mode }
-        );
-
-        await pipeline(inputStream, outputStream);
+        for await (const chunk of inputStream) {
+          outputStream.write(chunk.toString() + '\n');
+        }
       }
     }
   } catch (error) {
