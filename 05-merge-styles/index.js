@@ -12,10 +12,12 @@ async function bundleStyles(outCssName) {
   try {
     const outDir = path.resolve(__dirname, 'project-dist');
     await fsPromises.mkdir(outDir, { recursive: true });
-    const outputStream = fs.createWriteStream(
-      path.resolve(outDir, outCssName),
-      { encoding: 'utf8', flags: 'w' }
-    );
+    const cssPath = path.resolve(outDir, outCssName);
+
+    await fsPromises.writeFile(cssPath, '', {
+      encoding: 'utf8',
+      flag: 'w',
+    });
 
     let files = await fsPromises.readdir(readDir, { withFileTypes: true });
 
@@ -29,8 +31,15 @@ async function bundleStyles(outCssName) {
         );
 
         for await (const chunk of inputStream) {
-          outputStream.write(chunk.toString() + '\n');
+          await fsPromises.writeFile(cssPath, chunk.toString(), {
+            encoding: 'utf8',
+            flag: 'a',
+          });
         }
+        await fsPromises.writeFile(cssPath, '\n', {
+          encoding: 'utf8',
+          flag: 'a',
+        });
       }
     }
   } catch (error) {
