@@ -107,4 +107,4 @@ dist
 **/desktop.ini
 .prettierrc
 .idea
-.editorconfig
+# .editorconfig
