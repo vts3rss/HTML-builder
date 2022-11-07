@@ -104,9 +104,9 @@ async function buildPage() {
     }
 
     let regex = /{{[^{}]*?}}/gim;
-    inputFileData = inputFileData.replace(regex, '');
+    inputFileData = inputFileData.replaceAll(regex, '');
     regex = /[{}]/gim;
-    inputFileData = inputFileData.replace(regex, '');
+    inputFileData = inputFileData.replaceAll(regex, '');
 
     await fsPromises.writeFile(
       path.resolve(outDir, 'index.html'),
